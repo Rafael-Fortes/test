@@ -115,15 +115,7 @@ class ListaProdutosView(tk.Toplevel):
         desc = str(self.produtos_tree.item(selected_item, "values")[1])
         preco = float(self.produtos_tree.item(selected_item, "values")[2])
 
-        resultado = AlterarProdutoView(self, self.controller, codigo, desc, preco)
-        
-        if resultado:
-            produto = self.controller.buscarProduto(codigo=codigo)
-            codigo = produto.getCodigo
-            desc = produto.getDesc
-            preco = produto.getPreco
-
-            self.produtos_tree.insert("", "end", values=(codigo, desc, preco))
+        AlterarProdutoView(self, self.controller, codigo, desc, preco, self.main_tree, self.produtos_tree)
 
 
     def deletar_produto(self):
@@ -140,7 +132,7 @@ class ListaProdutosView(tk.Toplevel):
 
 
 class AlterarProdutoView(tk.Toplevel):
-    def __init__(self, master, controller, codigo_produto, descricao_atual, preco_atual):
+    def __init__(self, master, controller, codigo_produto, descricao_atual, preco_atual, main_tree, manage_tree):
         super().__init__(master)
         self.title("Alterar Produto")
         self.geometry("300x200")
@@ -148,6 +140,8 @@ class AlterarProdutoView(tk.Toplevel):
 
         self.controller = controller
         self.codigo_produto = codigo_produto
+        self.main_tree = main_tree
+        self.manage_tree = manage_tree
 
         # Labels e Entry para a alteração de descrição e preço
         self.descricao_label = ttk.Label(self, text="Descrição:")
@@ -177,6 +171,14 @@ class AlterarProdutoView(tk.Toplevel):
 
         if resultado:
             # Fecha a janela de alteração após o resultado
+            produto = self.controller.buscarProduto(self.codigo_produto)
+            codigo = produto.getCodigo
+            desc = produto.getDesc
+            preco = produto.getPreco
+
+            self.main_tree.update("", "end", values=(codigo, desc, preco))
+            self.manage_tree.update("", "end", values=(codigo, desc, preco))
+
             self.destroy()
         else:
             # Pode adicionar lógica para lidar com falhas na alteração, se necessário

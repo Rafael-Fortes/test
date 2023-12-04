@@ -57,7 +57,7 @@ class EstoqueController:
             return False
     
 
-    def alterarProduto(codigo: int, voa_descricao, novo_preco) -> bool:
+    def alterarProduto(self, codigo: int, nova_descricao: str, novo_preco: float) -> bool:
         try:
             # Busca o produto pelo código
             produto = self.buscarProduto(codigo)
@@ -76,3 +76,8 @@ class EstoqueController:
 
     def getEstoque(self) -> list:
         return self.estoque
+    
+
+if __name__ == "__main__":
+    test = EstoqueController()
+    test.buscarProduto(101)
