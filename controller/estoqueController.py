@@ -12,15 +12,16 @@ class EstoqueController:
 
     def cadastrarProduto(self, codigo: int, desc: str, preco: float) -> bool:
         try:
-            # Verifica se já existe um produto com o mesmo código
             if (not codigo) or (not desc) or (not preco):
                 raise ValueError("Dados Incompleto")
-            if any(produto.getCodigo == codigo for produto in self.estoque):
-                raise ValueError("Código de produto já cadastrado")
 
-            # Cria um novo produto e adiciona à lista
+            for produto in self.estoque:
+                if produto.getCodigo == codigo:
+                    raise ValueError("Código de produto já cadastrado")
+
             novo_produto = produtos.Carne(codigo, desc, preco)
             self.estoque.append(novo_produto)
+            
             return True
         except Exception as e:
             print(f"Erro ao cadastrar produto: {e}.")
@@ -29,13 +30,11 @@ class EstoqueController:
 
     def buscarProduto(self, codigo: int) -> produtos.Carne:
         try:
-            # Busca o produto pelo código
-            produto = next((produto for produto in self.estoque if produto.getCodigo == codigo), None)
+            for produto in self.estoque:
+                if produto.codigo == codigo:
+                    return produto
 
-            if produto is not None:
-                return produto
-            else:
-                raise ValueError("Produto não encontrado")
+            raise ValueError("Produto não encontrado")
         except Exception as e:
             print(f"Erro ao buscar produto: {e}")
             return None
@@ -43,12 +42,10 @@ class EstoqueController:
 
     def deletarProduto(self, codigo: int) -> bool:
         try:
-            # Encontra o índice do produto com o código fornecido
-            indice_produto = next((i for i, produto in enumerate(self.estoque) if produto.getCodigo == codigo), None)
+            produto = self.buscarProduto(codigo)
 
-            # Se o produto foi encontrado, remove-o da lista
-            if indice_produto is not None:
-                del self.estoque[indice_produto]
+            if produto is not None:
+                self.estoque.remove(produto)
                 return True
             else:
                 raise ValueError("Produto não encontrado")
@@ -59,13 +56,11 @@ class EstoqueController:
 
     def alterarProduto(self, codigo: int, nova_descricao: str, novo_preco: float) -> bool:
         try:
-            # Busca o produto pelo código
             produto = self.buscarProduto(codigo)
 
             if produto is not None:
-                # Atualiza a descrição e o preço do produto
-                produto.setDesc(nova_descricao)
-                produto.setPreco(novo_preco)
+                produto.setDesc = nova_descricao
+                produto.setPreco = novo_preco
                 return True
             else:
                 raise ValueError("Produto não encontrado para alteração")
@@ -76,8 +71,3 @@ class EstoqueController:
 
     def getEstoque(self) -> list:
         return self.estoque
-    
-
-if __name__ == "__main__":
-    test = EstoqueController()
-    test.buscarProduto(101)

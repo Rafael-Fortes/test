@@ -1,13 +1,13 @@
-from produtos import Carne
+from model import produtos
 
 class ItemVenda:
-    def __init__(self, produto: Carne, peso: float) -> None:
+    def __init__(self, produto: produtos.Carne, peso: float) -> None:
         self.__produto = produto
         self.__peso = peso
     
     
     @property
-    def produto(self) -> Carne:
+    def produto(self) -> produtos.Carne:
         return self.__produto
     
 

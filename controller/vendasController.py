@@ -8,29 +8,33 @@ class VendasController:
         self.qtdId = 0
     
 
-    def emitirNota(self, cliente: cliente.Cliente, itensVenda: list, data:str) -> bool:
+    def emitirNota(self, cliente: cliente.Cliente, data:str, main_view) -> bool:
         valorTotal = 0
 
-        for produto in itensVenda:
-            print(produto)
-            valorTotal += produto.getValor()
+        for item_venda in self.listaVendaAtual:
+            valorTotal += item_venda.getValor()
 
-        notaFiscal.NotaFiscal(id=qtdId, cliente=cliente, itens=itensVenda, valorTotal=valorTotal, data=data)
+        notaFiscal.NotaFiscal(Id=self.qtdId, cliente=cliente, itens=self.listaVendaAtual, valorTotal=valorTotal, data=data)
+
+        self.qtdId += 1
         self.listaNotasFiscas.append(notaFiscal)
         self.listaVendaAtual.clear()
         print(notaFiscal)
+        print(f"Notas: {self.listaNotasFiscas}")
+        print(f"Venta: {self.listaVendaAtual}")
+        main_view.atualizar_lista_venda()
         return True
 
 
-    def adicionarProduto(self, produto: produtos.Carne, peso: float) -> vendas.ItemVenda:
+    def adicionarProduto(self, produto: produtos.Carne, peso: float) -> bool:
         if produto and peso:
             item = vendas.ItemVenda(produto=produto, peso=peso)
             self.listaVendaAtual.append(item)
             print(item)
 
-            return item
+            return True
         else:
-            return None
+            return False
     
 
     def getNotasFiscais(self) -> list:

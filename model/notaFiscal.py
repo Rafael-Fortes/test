@@ -1,9 +1,9 @@
-import cliente, produtos
+from model import cliente, produtos
 
 
 class NotaFiscal:
-    def __init__(self, id: int, cliente: cliente.Cliente, itens: list, valorTotal: float, data: str) -> None:
-        self.__id = id
+    def __init__(self, Id: int, cliente: cliente.Cliente, itens: list, valorTotal: float, data: str) -> None:
+        self.__id = Id
         self.__cliente = cliente
         self.__itens = itens
         self.__valorTotal = valorTotal
@@ -11,7 +11,7 @@ class NotaFiscal:
     
 
     @property
-    def id(self) -> int:
+    def Id(self) -> int:
         return self.__id
     
     
